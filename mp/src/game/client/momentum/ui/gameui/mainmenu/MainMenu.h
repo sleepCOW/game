@@ -5,6 +5,7 @@
 
 class MainMenuButton;
 class CBaseMenuPanel;
+class UserComponent;
 
 enum SortFlags_t
 {
@@ -45,6 +46,7 @@ private:
     MainMenuButton *m_pButtonLobby;
     MainMenuButton *m_pButtonInviteFriends;
     MainMenuButton *m_pButtonSpectate;
+    UserComponent *m_pUserComponent;
 
     char m_pszMenuOpenSound[MAX_PATH];
     char m_pszMenuCloseSound[MAX_PATH];

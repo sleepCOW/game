@@ -19,6 +19,9 @@
 #include "vgui_controls/AnimationController.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
+#include <steam/isteamuser.h>
+
+#include "controls/UserComponent.h"
 #include "tier0/memdbgon.h"
 
 using namespace vgui;
@@ -28,6 +31,12 @@ static MainMenu *g_pMainMenu = nullptr;
 CON_COMMAND(reload_menu, "Reloads the main menu\n")
 {
     g_pMainMenu->CreateMenu();
+}
+
+CON_COMMAND(reload_menu_controls, "Reloads controls for the menu\n")
+{
+    g_pMainMenu->PostMessage(g_pMainMenu, new KeyValues("ReloadControls"));
+    g_pMainMenu->InvalidateLayout();
 }
 
 MainMenu::MainMenu(CBaseMenuPanel *pParent) : BaseClass(pParent, "MainMenu")
@@ -54,6 +63,7 @@ MainMenu::MainMenu(CBaseMenuPanel *pParent) : BaseClass(pParent, "MainMenu")
     ListenForGameEvent("lobby_join");
     ListenForGameEvent("spec_start");
     ListenForGameEvent("spec_stop");
+    ListenForGameEvent("site_auth");
 
     if (!GetAnimationController()->SetScriptFile(GetVPanel(), "scripts/HudAnimations.txt"))
         AssertMsg(0, "Couldn't load the animations!");
@@ -90,6 +100,8 @@ MainMenu::MainMenu(CBaseMenuPanel *pParent) : BaseClass(pParent, "MainMenu")
     m_pButtonSpectate->SetPriority(90);
     m_pButtonSpectate->SetButtonType(IN_GAME);
     m_pButtonSpectate->SetContentAlignment(Label::a_east);
+
+    m_pUserComponent = new UserComponent(this);
 
     m_pVersionLabel = new Button(this, "VersionLabel", "v" MOM_CURRENT_VERSION, this, "ShowVersion");
     m_pVersionLabel->SetPaintBackgroundEnabled(false);
@@ -184,6 +196,11 @@ void MainMenu::FireGameEvent(IGameEvent* event)
     {
         m_pButtonSpectate->SetText("#GameUI2_Spectate");
         m_pButtonSpectate->SetEngineCommand("mom_spectate");
+    }
+    else if (FStrEq(event->GetName(), "site_auth"))
+    {
+        CHECK_STEAM_API(SteamUser());
+        m_pUserComponent->SetUser(SteamUser()->GetSteamID().ConvertToUint64());
     }
 
     InvalidateLayout();
@@ -434,16 +451,19 @@ void MainMenu::PerformLayout()
     int screenWide, screenTall;
     surface()->GetScreenSize(screenWide, screenTall);
 
-    m_pButtonLobby->SetPos(screenWide - m_pButtonLobby->GetWidth() - m_iButtonsOffsetX,
+    /*m_pButtonLobby->SetPos(screenWide - m_pButtonLobby->GetWidth() - m_iButtonsOffsetX,
                            screenTall - m_pButtonLobby->GetTall() - m_iButtonsOffsetY);
 
     m_pButtonInviteFriends->SetPos(screenWide - m_pButtonInviteFriends->GetWidth() - m_iButtonsOffsetX,
         m_pButtonLobby->GetYPos() - m_pButtonInviteFriends->GetTall() - m_iButtonsSpace);
 
     m_pButtonSpectate->SetPos(screenWide - m_pButtonSpectate->GetWidth() - m_iButtonsOffsetX,
-        m_pButtonInviteFriends->GetYPos() - m_pButtonSpectate->GetTall() - m_iButtonsSpace);
+        m_pButtonInviteFriends->GetYPos() - m_pButtonSpectate->GetTall() - m_iButtonsSpace);*/
 
     m_pVersionLabel->SetPos(screenWide - m_pVersionLabel->GetWide() - GetScaledVal(4), GetScaledVal(2));
+
+    m_pUserComponent->SetPos(screenWide - m_pUserComponent->GetWide() - m_iButtonsOffsetX,
+                             screenTall - m_pUserComponent->GetTall() - m_iButtonsOffsetY);
 }
 
 void MainMenu::Activate()
