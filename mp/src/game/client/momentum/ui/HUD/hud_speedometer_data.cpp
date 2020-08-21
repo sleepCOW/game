@@ -147,6 +147,16 @@ void SpeedometerData::LoadGamemodeData(GameMode_t gametype)
 
         pLabel->LoadFromKV(pSpeedoKV);
     }
+
+    // get autolayout
+    bool bAutoLayout = pGamemodeKV->GetBool("autolayout", true);
+    g_pSpeedometer->SetAutoLayout(bAutoLayout);
+
+    // reload control resource if autolayout is turned off
+    if (!bAutoLayout)
+    {
+        g_pSpeedometer->GetBuildGroup()->ReloadControlSettings();
+    }
 }
 
 void SpeedometerData::SaveGamemodeData() 
@@ -186,6 +196,9 @@ void SpeedometerData::SaveGamemodeData(GameMode_t gametype)
         Q_snprintf(tmpBuf, BUFSIZELOCL, "%i", i + 1);
         pOrderKVs->SetString(tmpBuf, (*pOrderList)[i]->GetName());
     }
+
+    // set autolayout
+    pGamemodeKV->SetBool("autolayout", g_pSpeedometer->GetAutoLayout());
 
     m_pGamemodeSetupData->SaveToFile(g_pFullFileSystem, SPEEDOMETER_FILENAME, "MOD");
 }

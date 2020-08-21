@@ -31,7 +31,7 @@ CHudSpeedMeter *g_pSpeedometer = nullptr;
 
 CHudSpeedMeter::CHudSpeedMeter(const char *pElementName)
     : CHudElement(pElementName), EditablePanel(g_pClientMode->GetViewport(), "HudSpeedMeter"), 
-    m_cvarTimeScale("mom_replay_timescale"), m_pRunStats(nullptr), m_pRunEntData(nullptr), m_iLastZone(0)
+    m_cvarTimeScale("mom_replay_timescale"), m_pRunStats(nullptr), m_pRunEntData(nullptr), m_iLastZone(0), m_bAutoLayout(true)
 {
     ListenForGameEvent("zone_exit");
     ListenForGameEvent("zone_enter");
@@ -190,6 +190,9 @@ void CHudSpeedMeter::OnReloadControls()
 void CHudSpeedMeter::PerformLayout()
 {
     EditablePanel::PerformLayout();
+
+    if (!m_bAutoLayout)
+        return;
 
     int iHeightAcc = 0;
     for (auto i = 0; i < m_LabelOrderList.Count(); i++)

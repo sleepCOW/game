@@ -14,6 +14,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible"  "1"
@@ -71,6 +72,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible"  "1"
@@ -128,6 +130,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible"  "1"
@@ -181,6 +184,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible" "0"
@@ -255,6 +259,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible" "0"
@@ -352,6 +357,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible"  "1"
@@ -405,6 +411,7 @@
             "7" "RampLeaveVelocity"
             "8" "StageEnterExitVelocity"
         }
+        "autolayout" "1"
         "AbsSpeedometer"
         {
             "visible"  "1"
